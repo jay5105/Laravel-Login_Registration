@@ -2,43 +2,67 @@
 @section('title', 'Registration')
 
 @section('content')
-    <div class="container">
-        <div class="mt-5">
+    <style>
+        /* Background styling */
+        body {
+            background: url('https://images.unsplash.com/photo-1583364486567-ce2e045676e9?q=80&w=1934&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D') no-repeat center center fixed;
+            background-size: cover;
+            color: #fff;
+        }
+
+        /* Semi-transparent overlay for the form */
+        .overlay {
+            background: rgba(0, 0, 0, 0.6); /* Dark overlay for readability */
+            padding: 40px;
+            border-radius: 8px;
+        }
+
+        .form-control, .btn {
+            border-radius: 5px;
+        }
+    </style>
+
+    <div class="container d-flex justify-content-center align-items-center vh-100">
+        <div class="col-md-5 overlay">
+            <h3 class="text-center mb-4">Create an Account</h3>
+
+            {{-- Display Errors --}}
             @if($errors->any())
-            <div class="col-12">
-                @foreach($errors->all() as $errors)
-                    <div class="alert alert-danger">{{$errors}}</div>
-                @endforeach
-            </div>
+                <div class="alert alert-danger">
+                    <ul class="mb-0">
+                        @foreach($errors->all() as $error)
+                            <li>{{ $error }}</li>
+                        @endforeach
+                    </ul>
+                </div>
             @endif
 
-            @if(session()->has('error'))
-                <div class="alert alert-danger">{{session('errors')}}</div>
+            {{-- Display Session Messages --}}
+            @if(session('error'))
+                <div class="alert alert-danger">{{ session('error') }}</div>
             @endif
 
-            @if(session()->has('success'))
-                <div class="alert alert-success">{{session('success')}}</div>
+            @if(session('success'))
+                <div class="alert alert-success">{{ session('success') }}</div>
             @endif
+
+            {{-- Registration Form --}}
+            <form action="{{ route('registration.post') }}" method="POST">
+                @csrf
+                <div class="form-group mb-3">
+                    <label>Full Name</label>
+                    <input type="text" class="form-control" name="name">
+                </div>
+                <div class="form-group mb-3">
+                    <label>Email address</label>
+                    <input type="email" class="form-control" name="email">
+                </div>
+                <div class="form-group mb-3">
+                    <label>Password</label>
+                    <input type="password" class="form-control" name="password">
+                </div>
+                <button type="submit" class="btn btn-primary w-100">Register</button>
+            </form>
         </div>
-    <form action="{{ route('registration.post') }}" method="POST" class="ms-auto me-auto mt-3" style="width: 500px">
-        @csrf
-        <div class="mb-3">
-            <label class="form-label">Full Name</label>
-            <input type="text" class="form-control" name="name">
-        </div>
-        <div class="mb-3">
-            <label class="form-label">Email address</label>
-            <input type="email" class="form-control" name="email">
-        </div>
-        <div class="mb-3">
-            <label for="exampleInputPassword1" class="form-label">Password</label>
-            <input type="password" class="form-control" name="password"> 
-        </div>
-        <div class="mb-3 form-check">
-            <input type="checkbox" class="form-check-input" id="exampleCheck1">
-            <label class="form-check-label" for="exampleCheck1">Check me out</label>
-        </div>
-        <button type="submit" class="btn btn-primary">Submit</button>
-    </form>
     </div>
 @endsection
